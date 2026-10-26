@@ -1,0 +1,37 @@
+# Render Blueprint for the API. Place at the repo root (next to erp-billing-api/ and erp-billing-web/).
+# Render dashboard -> New -> Blueprint -> select this repo. Values marked `sync: false` are prompted for.
+services:
+  - type: web
+    name: erp-billing-api
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: erp-billing-api
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      # Comma-separated; `*` matches one hostname segment (Vercel previews).
+      # e.g. https://erp-billing-web.vercel.app,https://erp-billing-web-*.vercel.app
+      - key: FRONTEND_URL
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: defaultdb
+      - key: DB_SSL
+        value: "true"
+      # Add the Aiven CA as a Secret File named ca.pem (Environment tab); Render mounts it here.
+      - key: DB_SSL_CA
+        value: /etc/secrets/ca.pem
