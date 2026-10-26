@@ -6,7 +6,6 @@ services:
     runtime: node
     plan: free
     region: singapore
-    rootDir: erp-billing-api
     buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
